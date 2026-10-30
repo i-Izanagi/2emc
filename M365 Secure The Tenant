@@ -1,0 +1,70 @@
+
+> *"If you know the enemy and know yourself,*
+> *you need not fear the result of a hundred battles.*
+> *If you know yourself but not the enemy,*
+> *for every victory gained you will also suffer a defeat.*
+> *If you know neither the enemy nor yourself,*
+> *you will succumb in every battle."*
+>
+> *— Sun Tzu, The Art of War*
+
+
+
+
+We are living at a critical yet alarming juncture in an ever-evolving threat landscape. The traditional security model of building walls around a trusted perimeter is rapidly becoming obsolete. No absolute safe perimeter exists anymore — people work from various locations, data lives in the cloud, and identity itself, along with human cognition, has become the primary target.
+
+For organizations operating on Microsoft 365, this shift is not abstract — it is immediate. A single tenant consolidates identity, communication, collaboration, and data into one ecosystem, making deliberate security configuration not optional, but foundational. 
+Every member should be aware — who they are, what information they possess, and whether they risk becoming a weak link in an otherwise robust security posture. Most importantly, each individual must ask: is my identity intact? Both physical security practices and the often overlooked dimension of cognitive security form the human layer that no firewall can replace.
+
+The Microsoft 365 Secure the Tenant challenge was a challenging yet deeply rewarding experience as both a student and practitioner of cybersecurity. The hands-on exposure to configuring Microsoft Entra ID — the industry-standard identity backbone that every Microsoft 365 service depends on — reinforced how unified architecture and deliberate security decisions work together in practice. Based on this experience, the following represents my ranked priorities for securing a Microsoft 365 environment
+
+---
+**1 — MFA for All Users**:
+_Enforcing MFA across all the users establishes the single most impactful security layer available._
+
+In a world where identity lives in the cloud, MFA is the one factor that remains physically anchored to the individual.
+Microsoft Authenticator with number matching is the recommended baseline. Where budget permits, phishing-resistant methods such as FIDO2 security keys or Windows Hello for Business biometric authentication offer a more robust layer — eliminating the possibility of MFA fatigue attacks where users are bombarded with approval requests until they accidentally confirm a fraudulent login.
+
+**2 - Block Legacy Authentication** :
+_Organizations still relying on legacy authentication protocols represent one of the most prominent yet consistently overlooked entry points for a potential breach._
+
+Legacy protocols such as POP3, IMAP, and SMTP AUTH were built before modern security existed — they cannot support MFA, cannot be monitored effectively, and cannot be made compliant with modern identity standards.
+Even a robust security posture can miss a compromised legacy authentication pathway operating in plain sight — precisely because it looks like normal, expected traffic. Blocking legacy authentication through Conditional Access, without exception, is a practice every security administrator should ritualise from day one.
+
+Few drawbacks of blocking and isolating legacy systems worth noting: 
+- Legacy line of business applications may break unexpectedly and might require application audit first.
+- Printers, scanners, conference room devices often use legacy auth and requires modern alternatives before blocking
+- Can cause immediate disruption if enforced without prior audit Report-Only mode. 
+
+**3 — Entra ID Identity Protection (Sign-in + User Risk Policies)**
+_MFA stops known attack patterns — but Identity Protection catches what MFA misses._
+
+The Entra Identity Protection operates as two complementary policies working in tandem. Sign-in risk evaluates each authentication attempt in real time — flagging logins from anonymous IP addresses, impossible travel scenarios, or unfamiliar locations and responding automatically by demanding step-up verification or blocking access entirely.
+Together they form an **autonomous detection and response layer** — critically important for a two-admin team managing 100 users. No manual monitoring required. The system watches, evaluates, and responds continuously without administrator intervention.
+
+Few tradeoffs worth looking at:
+- False positives initially-  Legitimate travel flagged as impossible travel, that might need named locations configured to reduce noise.
+- Requires Entra ID P2 license
+
+**4- Least Privileged Admin Roles**
+_Assigning Global Administrator roles broadly for convenience is one of the highest-risk configurations possible._
+
+When every administrative function carries the same privilege level, a single compromised admin account becomes a complete tenant takeover with no containment boundary.
+Microsoft Entra ID offers *granular role assignments* — Exchange Administrator, User Administrator, Security Reader, Billing Administrator — each scoped to specific functions. 
+In a two-admin environment, roles should be assigned to the task, not the person. 
+
+A real world example: **2022 Uber breach**
+Once initial access was gained through MFA fatigue, the attacker discovered hardcoded admin credentials on an internal network share — and privilege escalation turned a limited foothold into full organizational access. The breach wasn’t just about the initial entry point. It was about what was reachable once inside.
+Had User Risk been enabled it would have flagged that account as compromised before the attacker even attempted login.
+
+**5- Preventing ungoverned application consent**
+_Consent phishing is a sophisticated evolution of traditional social engineering — where attackers don’t steal credentials, they simply ask for permission._
+
+A convincingly named third-party application, a persuasive email, one user click — and a malicious application gains persistent, legitimate access to company data without triggering a single security alert.
+By enforcing application consent controls, users cannot grant third-party applications access to company data without explicit admin approval.
+
+
+*This challenge offered more than technical exposure — it offered perspective. Navigating Microsoft Defender, Microsoft Entra ID, the Purview Compliance Portal, and the broader Microsoft 365 security ecosystem hands-on.
+As a student and practitioner of information security, the experience of hardening a live tenant — investigating real signals, prioritizing real risks, and translating complex findings into actionable guidance — has been among the most formative exercises of my learning journey.*
+
+Declaration on AI usage: Claude for structuring the writing and minimising formatting errors. All work is original research based on the skills navigator playlist and related web searches.
